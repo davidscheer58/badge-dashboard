@@ -23,6 +23,12 @@
   <search-bar></search-bar>
   <badge-list></badge-list>
 
+  <script>
+    document.querySelector('search-bar').addEventListener('search-bar-value-changed', (e) => {
+      document.querySelector('badge-list').search = e.detail.value;
+    });
+  </script>
+
   <script type="module" src="./src/badge-dashboard.js"></script>
   <script type="module" src="./src/search-bar.js"></script>
   <script type="module" src="./src/badge-list.js"></script>
