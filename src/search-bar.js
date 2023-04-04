@@ -3,7 +3,9 @@ import "@lrnwebcomponents/simple-icon/simple-icon.js";
 import "@lrnwebcomponents/simple-icon/lib/simple-icons.js";
 
 class Searchbar extends LitElement {
-  static properties = {}
+  static properties = {
+    value: { type: String },
+  }
   static styles = css`
     .searchbar {
       box-shadow: 1px 1px 1px 2px gray;
@@ -24,21 +26,36 @@ class Searchbar extends LitElement {
   constructor() {
     super();
   }
+  
+  updated(changedProperties) {
+    changedProperties.forEach((oldValue, propName) => {
+      if (propName === "value") {
+        this.dispatchEvent(
+          new CustomEvent("search-bar-value-changed", {
+            detail: {
+              value: this[propName],
+            },
+          })
+        );
+      }
+    });
+  }
+
+  handleInput(e) {
+    this.value = this.shadowRoot.querySelector("input").value;
+  }
 
   render() {
     return html`
-      <main>
         <div class="searchbar">
-          <form>
             <simple-icon icon="search" class="icon"></simple-icon>
             <input
               class="searchInput"
               type="text"
               placeholder="Search Content, Topics, and People"
+              @input="${this.handleInput}"
             />
-          </form>
         </div>
-      </main>
     `;
   }
 }

@@ -9,17 +9,20 @@ export class Badges extends LitElement{
 
     static get properties() {
         return {
-            badges: { type: Array }
+            badges: { type: Array },
+            search: { type: String }
         }
     }
 
     constructor() {
         super();
         this.badges = [];
-        this.updateRoster();
+        this.updateRoster(this.search);
     }
 
-    updateRoster() {
+    updateRoster(search) {
+        console.log(search);
+        // you need to pass search to the endpoint
         const address = new URL('../assets/badge-map.json', import.meta.url).href;
         fetch(address).then((response) => {
             if (response.ok) {
@@ -31,6 +34,15 @@ export class Badges extends LitElement{
             this.badges = data;
         });
     }
+
+    updated(changedProperties) {
+        changedProperties.forEach((oldValue, propName) => {
+            if (propName === "search") {
+                this.updateRoster(this.search);
+            }
+        });
+    }
+
 
     static get styles() {
         return css`
